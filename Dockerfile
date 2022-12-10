@@ -13,6 +13,8 @@ RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path r
 COPY . .
 RUN cargo build --bin juixe-bot --release --target x86_64-unknown-linux-musl
 
-FROM scratch
-COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/juixe-bot /
-ENTRYPOINT /juixe-bot
+FROM alpine AS runtime
+RUN addgroup -S user && adduser -S user -G user
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/juixe-bot /usr/local/bin/
+USER user
+CMD ["/usr/local/bin/juixe-bot"]

@@ -1,4 +1,6 @@
 target/
+.github/
+.git/
 Dockerfile
 fly.toml
 README.md
